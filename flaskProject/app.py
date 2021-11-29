@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_restful import Resource, Api
+import utils.rest_utils as rest_utils
 
 app = Flask(__name__)
 api = Api(app)
@@ -17,32 +18,38 @@ class WelcomePage(Resource):
 
 
 class BuyTransaction(Resource):
-    def post(self):
+    def post(self, _id: int):
+        inputs = rest_utils.RESTContext(request)
+        r_json = inputs.to_json()
+        params = r_json["data"]
+        params["user_id"] = _id
         pass
 
 
 class SellTransaction(Resource):
-    def post(self):
+    def post(self, _id: int):
+        inputs = rest_utils.RESTContext(request)
+        r_json = inputs.to_json()
+        params = r_json["data"]
+        params["user_id"] = _id
         pass
 
 
 class GetPortfolio(Resource):
-    def get(self):
+    def get(self, _id: int):
         pass
 
 
 class GetUserStock(Resource):
-    def get(self):
+    def get(self, _id: str, _ticker: str):
         pass
 
 
 api.add_resource(WelcomePage, '/')
-api.add_resource(BuyTransaction, '/api/buy/<user_id>')
-api.add_resource(SellTransaction, '/api/sell/<user_id>')
-api.add_resource(GetPortfolio, '/api/get/<user_id>')
-api.add_resource(GetUserStock, '/api/getUserStock/<user_id>')
-
-
+api.add_resource(BuyTransaction, '/api/buy/<int:_id>/')
+api.add_resource(SellTransaction, '/api/sell/<int:_id>/')
+api.add_resource(GetPortfolio, '/api/get/<int:_id>/')
+api.add_resource(GetUserStock, '/api/getUserStock/<int:_id>/stock/<string:_ticker>/')
 
 
 if __name__ == '__main__':
