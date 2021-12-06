@@ -70,19 +70,12 @@ class SellTransaction(Resource):
         porto_url = f"{PORTFOLIO_API_URL}{PORTFOLIO_API_URL_SELL}{str(_id)}/"
         r_porto = requests.post(porto_url, json=porto_payload)
 
-        print(r_porto.json())
+        msg = r_porto.json()
+        del msg['links']
 
-        msg = {}
-        if r_porto.json():
-            # receiving a message means that updating the stock portfolio fails
-            msg['success'] = 0
-            msg['cause_of_error'] = r_porto.json()['message']
-            # 422 BAD DATA
-            rsp = Response(json.dumps(msg), status=422, content_type="application/json")
+        if (msg['success']):
+            # add money to user's wallet if stock is successfully sold
 
-        else:
-            msg['success'] = 1
-            
             # get total money to be added
             money_amount = (r_json["data"]["quantity"])*(r_json["data"]["price"])
             money_payload = {
@@ -98,6 +91,12 @@ class SellTransaction(Resource):
             }
             # 201 CREATED
             rsp = Response(json.dumps(msg), status=201, content_type="application/json")
+
+        else:
+            msg['success'] = 0
+            msg['cause_of_error'] = r_porto.json()['message']
+            # 422 BAD DATA
+            rsp = Response(json.dumps(msg), status=422, content_type="application/json")
             
         return rsp
 
