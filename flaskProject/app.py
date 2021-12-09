@@ -7,15 +7,13 @@ app = Flask(__name__)
 api = Api(app)
 
 
-# PORTFOLIO_API_URL = 'http://127.0.0.2:5000'
-PORTFOLIO_API_URL = 'http://localhost:5002'
+PORTFOLIO_API_URL = 'https://z4sr5g47u6.execute-api.us-east-1.amazonaws.com/api/portfolio'
 PORTFOLIO_API_URL_BUY = '/api/buy/'
 PORTFOLIO_API_URL_SELL = '/api/sell/'
 PORTFOLIO_API_URL_USER_PORTFOLIO = '/api/user/'
 PORTFOLIO_API_URL_USER_SHARE_QUANT_P1 = '/api/user/'
 PORTFOLIO_API_URL_USER_SHARE_QUANT_P2 = '/stock/'
-# MONEY_API_URL = 'http://127.0.0.3:5001'
-MONEY_API_URL = 'http://localhost:5001'
+MONEY_API_URL = 'https://z4sr5g47u6.execute-api.us-east-1.amazonaws.com/api'
 MONEY_API_URL_ADD = '/money/'
 
 
@@ -67,13 +65,13 @@ class SellTransaction(Resource):
         
         # update stock portfolio
         porto_payload = {k: v for k, v in r_json["data"].items() if k!="price"}
-        porto_url = f"{PORTFOLIO_API_URL}{PORTFOLIO_API_URL_SELL}{str(_id)}/"
+        porto_url = f"{PORTFOLIO_API_URL}{PORTFOLIO_API_URL_SELL}{str(_id)}"
         r_porto = requests.post(porto_url, json=porto_payload)
 
         msg = r_porto.json()
-        del msg['links']
+        status_code = r_porto.status_code
 
-        if (msg['success']):
+        if (status_code==201):
             # add money to user's wallet if stock is successfully sold
 
             # get total money to be added
@@ -94,7 +92,6 @@ class SellTransaction(Resource):
 
         else:
             msg['success'] = 0
-            msg['cause_of_error'] = r_porto.json()['message']
             # 422 BAD DATA
             rsp = Response(json.dumps(msg), status=422, content_type="application/json")
             
