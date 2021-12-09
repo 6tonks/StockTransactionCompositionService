@@ -114,10 +114,10 @@ class GetUserStock(Resource):
 
 
 api.add_resource(WelcomePage, '/')
-api.add_resource(BuyTransaction, '/api/buy/<int:_id>/')
-api.add_resource(SellTransaction, '/api/sell/<int:_id>/')
-api.add_resource(GetPortfolio, '/api/userPortfolio/<int:_id>/')
-api.add_resource(GetUserStock, '/api/userShareQuantity/<int:_id>/stock/<string:_ticker>/')
+api.add_resource(BuyTransaction, '/api/buy/<int:_id>')
+api.add_resource(SellTransaction, '/api/sell/<int:_id>')
+api.add_resource(GetPortfolio, '/api/userPortfolio/<int:_id>')
+api.add_resource(GetUserStock, '/api/userShareQuantity/<int:_id>/stock/<string:_ticker>')
 
 
 if __name__ == '__main__':
