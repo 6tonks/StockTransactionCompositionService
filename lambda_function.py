@@ -27,12 +27,18 @@ def lambda_handler(event, context):
     }
     
     response = client.start_execution(
-        stateMachineArn="arn:aws:states:us-east-1:593444383578:stateMachine:StockTransaction",
+        stateMachineArn="arn:aws:states:us-east-1:113471254581:stateMachine:StockTransaction",
         name=transaction_id,
         input=json.dumps(input)
     )
     
     print(response)
+    
+    if response['ResponseMetadata']['HTTPStatusCode'] != 200:
+        return {
+            "statusCode": 500,
+            "body": json.dumps('Stock transaction is failed')
+        }
     
     return {
         "statusCode": 200,
