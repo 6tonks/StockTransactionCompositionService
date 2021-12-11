@@ -30,7 +30,7 @@ class BuyTransaction(Resource):
         r_json = inputs.to_json()
 
         # get total money to be deducted
-        money_amount = (r_json["data"]["quantity"])*(r_json["data"]["price"])
+        money_amount = float(r_json["data"]["quantity"])*float(r_json["data"]["price"])
         money_payload = {
             "method": "deduction",
             "money_amount": money_amount
@@ -77,7 +77,7 @@ class SellTransaction(Resource):
             # add money to user's wallet if stock is successfully sold
 
             # get total money to be added
-            money_amount = (r_json["data"]["quantity"])*(r_json["data"]["price"])
+            money_amount = float(r_json["data"]["quantity"])*float(r_json["data"]["price"])
             money_payload = {
                 "method": "addition",
                 "money_amount": money_amount
