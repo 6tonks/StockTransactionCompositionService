@@ -1,9 +1,11 @@
 from flask import Flask, request, Response, json
 from flask_restful import Resource, Api
+from flask_cors import CORS
 import utils.rest_utils as rest_utils
 import requests
 
 app = Flask(__name__)
+CORS(app)
 api = Api(app)
 
 
